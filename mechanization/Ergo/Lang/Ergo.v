@@ -93,6 +93,7 @@ Section Ergo.
     | SCallClause : A -> ergo_expr -> string -> list ergo_expr -> ergo_stmt (**r clause call *)
     | SCallContract : A -> ergo_expr -> list ergo_expr -> ergo_stmt (**r contract call *)
     | SSetState : A -> ergo_expr -> ergo_stmt -> ergo_stmt
+    | SSetStateDot : A -> string -> ergo_expr -> ergo_stmt -> ergo_stmt
     | SEmit : A -> ergo_expr -> ergo_stmt -> ergo_stmt
     | SLet : A -> string -> option (@ergo_type A N) -> ergo_expr -> ergo_stmt -> ergo_stmt (**r local variable *)
     | SIf : A -> ergo_expr -> ergo_stmt -> ergo_stmt -> ergo_stmt
@@ -108,6 +109,7 @@ Section Ergo.
       | SCallClause a _ _ _ => a
       | SCallContract a _ _ => a
       | SSetState a _ _ => a
+      | SSetStateDot a _ _ _ => a
       | SEmit a _ _ => a
       | SLet a _ _ _ _ => a
       | SIf a _ _ _ => a

@@ -493,6 +493,10 @@ Section ErgoNameResolution.
         elift2 (SSetState prov)
                (resolve_ergo_expr ectxt nsctxt e1)
                (resolve_ergo_stmt ectxt nsctxt s2)
+      | SSetStateDot prov a e1 s2 =>
+        elift2 (SSetStateDot prov a)
+               (resolve_ergo_expr ectxt nsctxt e1)
+               (resolve_ergo_stmt ectxt nsctxt s2)
       | SEmit prov e1 s2 =>
         elift2 (SEmit prov)
                (resolve_ergo_expr ectxt nsctxt e1)

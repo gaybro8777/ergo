@@ -51,6 +51,7 @@ Section ErgoCTEval.
       | Some d => esuccess d
       end
     | EConst (prov,_) d => esuccess d
+    | EText (prov,_) _ => text_in_calculus_error prov
     | ENone (prov,_) => esuccess dnone
     | ESome (prov,_) e => elift dsome (ergoct_eval_expr ctxt e)
     | EArray (prov,_) es =>

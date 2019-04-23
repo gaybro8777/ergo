@@ -111,6 +111,7 @@ Section ErgoCTtoErgoNNRC.
       else esuccess (NNRCVar v)
     | EConst (prov,_) d =>
       esuccess (NNRCConst d)
+    | EText (prov,_) _ => text_in_calculus_error prov
     | ENone (prov,_) => esuccess (NNRCConst dunit) (* XXX Not safe ! *)
     | ESome (prov,_) e => ergoct_expr_to_nnrc env e (* XXX Not safe ! *)
     | EArray (prov,_) el =>

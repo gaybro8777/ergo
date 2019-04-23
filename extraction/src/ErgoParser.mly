@@ -37,6 +37,11 @@ let mk_provenance
 %token <string> STRING
 %token <string> IDENT
 
+%token OPENTEXT
+%token CLOSEEXPR
+%token <string> OPENEXPR
+%token <string> CLOSETEXT
+
 %token NAMESPACE IMPORT DEFINE FUNCTION
 %token ABSTRACT TRANSACTION CONCEPT EVENT ASSET PARTICIPANT ENUM EXTENDS
 %token CONTRACT OVER CLAUSE
@@ -375,6 +380,11 @@ expr:
     { ErgoCompiler.econst (mk_provenance $startpos $endpos) (ErgoCompiler.ErgoData.dstring (Util.char_list_of_string s)) }
 | LBRACKET el = exprlist RBRACKET
     { ErgoCompiler.earray (mk_provenance $startpos $endpos) el }
+(* Text *)
+| OPENTEXT sl = textlist s0 = CLOSETEXT
+    { let slast = ErgoCompiler.econst (mk_provenance $startpos $endpos) (ErgoCompiler.ErgoData.dstring (Util.char_list_of_string s0)) in
+      let sl' = sl @ [slast] in
+      ErgoCompiler.etext (mk_provenance $startpos $endpos) sl' }
 (* Expressions *)
 | v = IDENT
     { ErgoCompiler.evar (mk_provenance $startpos $endpos) (Util.char_list_of_string v) }
@@ -441,6 +451,14 @@ expr:
 | e1 = expr PLUSPLUS e2 = expr
     { ErgoCompiler.ebinarybuiltin (mk_provenance $startpos $endpos) ErgoCompiler.ErgoOps.Binary.opstringconcat e1 e2 }
 
+(* text list *)
+textlist:
+|
+    { [] }
+| s0 = OPENEXPR e = expr CLOSEEXPR sl = textlist
+    { let sfirst = ErgoCompiler.econst (mk_provenance $startpos $endpos) (ErgoCompiler.ErgoData.dstring (Util.char_list_of_string s0)) in
+      [ sfirst ; e ] @ sl }
+
 (* foreach list *)
 foreachlist:
 | v = ident IN e = expr
@@ -449,7 +467,6 @@ foreachlist:
     { (v,e) :: fl }
 | v = ident IN e = expr FOREACH fl = foreachlist
     { (v,e) :: fl }
-
 
 (* expression list *)
 exprlist:

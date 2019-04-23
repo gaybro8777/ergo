@@ -34,10 +34,16 @@ let parse parser lexer buf =
       ergo_raise (ergo_parse_error "Parse error" !filename start_pos end_pos)
   end
 
+let lexer_dispatch lh buf  =
+  begin match lh_top_state lh with
+  | TextState -> ErgoLexer.text lh buf
+  | ExprState -> ErgoLexer.token lh buf
+  end
+
 let parse_ergo_module f : ergo_module =
-  parse ErgoParser.main_module (ErgoLexer.token (string_buff ())) f
+  parse ErgoParser.main_module (lexer_dispatch (lh_make_expr ())) f
 let parse_ergo_declarations f : ergo_declaration list =
-  parse ErgoParser.top_decls (ErgoLexer.token (string_buff ())) f
+  parse ErgoParser.top_decls (lexer_dispatch (lh_make_expr ())) f
 
 (** Parse from buffer *)
 let parse_string p_fun s =

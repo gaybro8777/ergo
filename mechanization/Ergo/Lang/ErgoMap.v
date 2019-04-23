@@ -40,6 +40,12 @@ Section ErgoMap.
       | EThisState _ => esuccess expr
       | EVar _ _ => esuccess expr
       | EConst _ _ => esuccess expr
+      | EText loc a =>
+        elift (EText loc)
+              (fold_left
+                 (fun ls na =>
+                    elift2 postpend ls (ergo_map_expr ctx ctxt_new_variable_scope fn na))
+                 a (esuccess nil))
       | ENone _ => esuccess expr
       | ESome loc e =>
         elift (ESome loc) (ergo_map_expr ctx ctxt_new_variable_scope fn e)

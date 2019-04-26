@@ -153,6 +153,39 @@ class Commands {
     }
 
     /**
+     * Invoke generateText for an Ergo contract
+     *
+     * @param {string[]} ergoPaths paths to the Ergo modules
+     * @param {string[]} ctoPaths paths to CTO models
+     * @param {string} contractName the contract name
+     * @param {string} contractInput the contract data
+     * @param {string} currentTime the definition of 'now'
+     * @param {object} paramsInput the parameters for the clause
+     * @returns {object} Promise to the result of execution
+     */
+    static generateText(ergoPaths,ctoPaths,contractName,contractInput,currentTime,paramsInput) {
+        const engine = new Engine();
+        const templateLogic = new TemplateLogic('es6');
+        templateLogic.addErgoBuiltin();
+        templateLogic.setContractName(contractName);
+        if (!ergoPaths) { return Promise.reject('No input ergo found'); }
+        for (let i = 0; i < ergoPaths.length; i++) {
+            const ergoFile = ergoPaths[i];
+            const ergoContent = Fs.readFileSync(ergoFile, 'utf8');
+            templateLogic.addLogicFile(ergoContent, ergoFile);
+        }
+        if (!ctoPaths) { ctoPaths = []; }
+        for (let i = 0; i < ctoPaths.length; i++) {
+            const ctoFile = ctoPaths[i];
+            const ctoContent = Fs.readFileSync(ctoFile, 'utf8');
+            templateLogic.addModelFile(ctoContent, ctoFile);
+        }
+        const contractJson = getJson(contractInput);
+        const clauseParams = getJson(paramsInput);
+        return engine.compileAndGenerateText(templateLogic,contractName,contractJson,clauseParams,currentTime);
+    }
+
+    /**
      * Parse CTO to JSON File
      *
      * @param {string} ctoPath path to CTO model file

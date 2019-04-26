@@ -165,6 +165,54 @@ require('yargs')
                 Logger.error(err.message + ' ' + JSON.stringify(err));
             });
     })
+    .command('generateText', 'invoke generateText for an Ergo contract', (yargs) => {
+        yargs.demandOption(['contractName', 'contract'], 'Please provide at least contract and contractName');
+        yargs.usage('Usage: $0 --contract [file] --params [file] [ctos] [ergos]');
+        yargs.option('contractName', {
+            describe: 'the name of the contract'
+        });
+        yargs.option('contract', {
+            describe: 'path to the contract data'
+        });
+        yargs.option('currentTime', {
+            describe: 'the current time',
+            type: 'string',
+            default: Moment().format() // Defaults to now
+        });
+        yargs.option('params', {
+            describe: 'path to the parameters',
+            type: 'string',
+            default: null
+        });
+    }, (argv) => {
+        let ctoPaths = [];
+        let ergoPaths = [];
+
+        const files = argv._;
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (file.split('.').pop() === 'cto') {
+                //Logger.info('Found CTO: ' + file);
+                ctoPaths.push(file);
+            } else if (file.split('.').pop() === 'ergo') {
+                //Logger.info('Found Ergo: ' + file);
+                ergoPaths.push(file);
+            }
+        }
+
+        if (argv.verbose) {
+            Logger.info(`init Ergo ${ergoPaths} over data ${argv.contract} with params ${argv.params} and CTOs ${ctoPaths}`);
+        }
+
+        // Run contract
+        Commands.generateText(ergoPaths, ctoPaths, argv.contractName, { file: argv.contract }, argv.currentTime, argv.params ? { file: argv.params } : { content: '{}' })
+            .then((result) => {
+                Logger.info(result.response.text);
+            })
+            .catch((err) => {
+                Logger.error(err.message + ' ' + JSON.stringify(err));
+            });
+    })
     .option('verbose', {
         alias: 'v',
         default: false

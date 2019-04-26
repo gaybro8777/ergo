@@ -11,28 +11,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+namespace org.accordproject.interests
 
-namespace org.accordproject.helloworld
+import org.accordproject.loan.interests.*
 
-transaction Request {
-  o String input
-}
+contract Interests over TemplateModel {
+	// Generate Text
+	clause generateText() : TextResponse {
+		return TextResponse { text : {{
+This is a fixed interest loan to the amount of {{contract.loanAmount}}
+at the yearly interest rate of {{contract.rate}}%
+with a loan term of {{contract.loanDuration}},
+and montly payments of {{monthlyPaymentFormula(contract.loanAmount,contract.rate,contract.loanDuration)}}
+}}
+	}
+	}
 
-transaction Response {
-  o String output
-}
-
-/**
- * The template model
- */
-@AccordTemplateModel("helloworld")
-concept TemplateModel {
-  /**
-   * The name for the clause
-   */
-  o String name
-}
-
-concept TextResponse {
-  o String text
 }

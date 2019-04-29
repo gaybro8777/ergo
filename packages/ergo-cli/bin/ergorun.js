@@ -167,7 +167,7 @@ require('yargs')
     })
     .command('generateText', 'invoke generateText for an Ergo contract', (yargs) => {
         yargs.demandOption(['contractName', 'contract'], 'Please provide at least contract and contractName');
-        yargs.usage('Usage: $0 --contract [file] --params [file] [ctos] [ergos]');
+        yargs.usage('Usage: $0 --contract [file] [ctos] [ergos]');
         yargs.option('contractName', {
             describe: 'the name of the contract'
         });
@@ -178,11 +178,6 @@ require('yargs')
             describe: 'the current time',
             type: 'string',
             default: Moment().format() // Defaults to now
-        });
-        yargs.option('params', {
-            describe: 'path to the parameters',
-            type: 'string',
-            default: null
         });
     }, (argv) => {
         let ctoPaths = [];
@@ -201,13 +196,13 @@ require('yargs')
         }
 
         if (argv.verbose) {
-            Logger.info(`init Ergo ${ergoPaths} over data ${argv.contract} with params ${argv.params} and CTOs ${ctoPaths}`);
+            Logger.info(`generateText for Ergo ${ergoPaths} over data ${argv.contract}`);
         }
 
         // Run contract
-        Commands.generateText(ergoPaths, ctoPaths, argv.contractName, { file: argv.contract }, argv.currentTime, argv.params ? { file: argv.params } : { content: '{}' })
+        Commands.generateText(ergoPaths, ctoPaths, argv.contractName, { file: argv.contract }, argv.currentTime)
             .then((result) => {
-                Logger.info(result.response.text);
+                Logger.info(result.response);
             })
             .catch((err) => {
                 Logger.error(err.message + ' ' + JSON.stringify(err));

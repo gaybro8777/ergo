@@ -160,10 +160,9 @@ class Commands {
      * @param {string} contractName the contract name
      * @param {string} contractInput the contract data
      * @param {string} currentTime the definition of 'now'
-     * @param {object} paramsInput the parameters for the clause
      * @returns {object} Promise to the result of execution
      */
-    static generateText(ergoPaths,ctoPaths,contractName,contractInput,currentTime,paramsInput) {
+    static generateText(ergoPaths,ctoPaths,contractName,contractInput,currentTime) {
         const engine = new Engine();
         const templateLogic = new TemplateLogic('es6');
         templateLogic.addErgoBuiltin();
@@ -181,8 +180,7 @@ class Commands {
             templateLogic.addModelFile(ctoContent, ctoFile);
         }
         const contractJson = getJson(contractInput);
-        const clauseParams = getJson(paramsInput);
-        return engine.compileAndGenerateText(templateLogic,contractName,contractJson,clauseParams,currentTime);
+        return engine.compileAndGenerateText(templateLogic,contractName,contractJson,currentTime);
     }
 
     /**

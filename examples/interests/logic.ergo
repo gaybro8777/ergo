@@ -17,14 +17,12 @@ import org.accordproject.loan.interests.*
 
 contract Interests over TemplateModel {
 	// Generate Text
-	clause generateText() : TextResponse {
-		return TextResponse { text : {{
+	clause generateText() : String {
+		return {{
 This is a fixed interest loan to the amount of {{contract.loanAmount}}
 at the yearly interest rate of {{contract.rate}}%
 with a loan term of {{contract.loanDuration}},
 and montly payments of {{monthlyPaymentFormula(contract.loanAmount,contract.rate,contract.loanDuration)}}
 }}
 	}
-	}
-
 }

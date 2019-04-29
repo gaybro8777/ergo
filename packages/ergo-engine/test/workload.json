@@ -162,5 +162,17 @@
     "expected": {
       "error": "Parse error (at file examples/bad-logic/logic.ergo line 17 col 20). \ncontract HelloWorld ovr TemplateModel {\n                    ^^^                "
     }
+  },
+  {
+    "name": "interests clause (generate text)",
+    "dir": "examples/interests",
+    "ergo": ["interests.ergo","logic.ergo"],
+    "models": ["model.cto"],
+    "contract": "contract.json",
+    "contractName": "org.accordproject.interests.Interests",
+    "clauseName": "generateText",
+    "expected": {
+      "response": "\nThis is a fixed interest loan to the amount of 100000.0\nat the yearly interest rate of 2.5%\nwith a loan term of 15.0,\nand montly payments of 667.0\n"
+    }
   }
 ]

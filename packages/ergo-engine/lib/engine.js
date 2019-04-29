@@ -199,16 +199,15 @@ class Engine {
      * @param {TemplateLogic} logic  - the logic to execute
      * @param {string} contractId - the contract identifier
      * @param {object} contract - the contract data
-     * @param {object} params - the clause parameters
      * @param {string} currentTime - the definition of 'now'
      * @return {Promise} a promise that resolves to a result for the clause initialization
      */
-    async generateText(logic, contractId, contract, params, currentTime) {
+    async generateText(logic, contractId, contract, currentTime) {
         const defaultState = {
             '$class':'org.accordproject.cicero.contract.AccordContractState',
             'stateId':'org.accordproject.cicero.contract.AccordContractState#1'
         };
-        return this.invoke(logic, contractId, 'generateText', contract, params, defaultState, currentTime);
+        return this.invoke(logic, contractId, 'generateText', contract, {}, defaultState, currentTime);
     }
 
     /**
@@ -233,13 +232,12 @@ class Engine {
      * @param {TemplateLogic} logic  - the logic to execute
      * @param {string} contractId - the contract identifier
      * @param {object} contract - the contract data
-     * @param {object} params - the clause parameters
      * @param {string} currentTime - the definition of 'now'
      * @return {Promise} a promise that resolves to a result for the clause initialization
      */
-    compileAndGenerateText(logic, contractId, contract, params, currentTime) {
+    compileAndGenerateText(logic, contractId, contract, currentTime) {
         return logic.compileLogic(false).then(() => {
-            return this.generateText(logic, contractId, contract, params, currentTime);
+            return this.generateText(logic, contractId, contract, currentTime);
         });
     }
 

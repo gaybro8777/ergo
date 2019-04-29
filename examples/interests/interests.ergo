@@ -23,6 +23,11 @@ define function monthlyPaymentFormula(loanAmount: Double, rate: Double, loanDura
     return roundn(monthlyPayment, 0)
 }
 
+define function cummulativeInterests(loanAmount: Double, rate: Double, loanDuration: Integer) : Double {
+  let term = longToDouble(loanDuration * 12);
+	return term * monthlyPaymentFormula(loanAmount, rate, loanDuration) - loanAmount
+}
+
 // Try it also on NYT calculator: https://www.nytimes.com/real-estate/mortgage-calculator
 // test: return monthlyPaymentFormula(100000.00, 2.5, 15)
 // result: 667.0

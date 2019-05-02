@@ -230,13 +230,13 @@ class Engine {
      * Compile then generate text
      *
      * @param {TemplateLogic} logic  - the logic to execute
-     * @param {string} contractId - the contract identifier
      * @param {object} contract - the contract data
      * @param {string} currentTime - the definition of 'now'
      * @return {Promise} a promise that resolves to a result for the clause initialization
      */
-    compileAndGenerateText(logic, contractId, contract, currentTime) {
+    compileAndGenerateText(logic, contract, currentTime) {
         return logic.compileLogic(false).then(() => {
+            const contractId = logic.getContractName();
             return this.generateText(logic, contractId, contract, currentTime);
         });
     }

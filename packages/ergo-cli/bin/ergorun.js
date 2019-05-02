@@ -166,11 +166,8 @@ require('yargs')
             });
     })
     .command('generateText', 'invoke generateText for an Ergo contract', (yargs) => {
-        yargs.demandOption(['contractName', 'contract'], 'Please provide at least contract and contractName');
+        yargs.demandOption(['contract'], 'Please provide at least the contract data');
         yargs.usage('Usage: $0 --contract [file] [ctos] [ergos]');
-        yargs.option('contractName', {
-            describe: 'the name of the contract'
-        });
         yargs.option('contract', {
             describe: 'path to the contract data'
         });
@@ -200,7 +197,7 @@ require('yargs')
         }
 
         // Run contract
-        Commands.generateText(ergoPaths, ctoPaths, argv.contractName, { file: argv.contract }, argv.currentTime)
+        Commands.generateText(ergoPaths, ctoPaths, { file: argv.contract }, argv.currentTime)
             .then((result) => {
                 Logger.info(result.response);
             })

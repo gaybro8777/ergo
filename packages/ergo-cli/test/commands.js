@@ -181,19 +181,19 @@ describe('ergo', () => {
             const ergoPath2 = Path.join('test/examples/interests', 'interests.ergo');
             const ctoPath = Path.join('test/examples/interests', 'model.cto');
             const contractPath = { file: Path.join('test/examples/interests', 'contract.json') };
-            const result = await Commands.generateText([ergoPath,ergoPath2], [ctoPath], 'org.accordproject.interests.Interests', contractPath, '1970-01-01T00:00:00Z');
+            const result = await Commands.generateText([ergoPath,ergoPath2], [ctoPath], contractPath, '1970-01-01T00:00:00Z');
             result.response.should.equal('\nThis is a fixed interest loan to the amount of 100000.0\nat the yearly interest rate of 2.5%\nwith a loan term of 15.0,\nand montly payments of 667.0\n');
         });
         it('should throw when smart Ergo clause without a cto', async function () {
             const ergoPath = Path.join('test/examples/interests', 'logic.ergo');
             const ergoPath2 = Path.join('test/examples/interests', 'interests.ergo');
             const contractPath = { file: Path.join('test/examples/interests', 'contract.json') };
-            return Commands.generateText([ergoPath,ergoPath2], undefined, 'org.accordproject.interests.Interests', contractPath, '1970-01-01T00:00:00Z').should.be.rejectedWith('Compilation error (at file test/examples/interests/logic.ergo line 18 col 24). Cannot find type with name \'TemplateModel\'\ncontract Interests over TemplateModel {\n                        ^^^^^^^^^^^^^  ');
+            return Commands.generateText([ergoPath,ergoPath2], undefined, contractPath, '1970-01-01T00:00:00Z').should.be.rejectedWith('Compilation error (at file test/examples/interests/logic.ergo line 18 col 24). Cannot find type with name \'TemplateModel\'\ncontract Interests over TemplateModel {\n                        ^^^^^^^^^^^^^  ');
         });
         it('should fail when Ergo logic is missing', async function () {
             const ctoPath = Path.join('test/examples/interests', 'model.cto');
             const contractPath = { file: Path.join('test/examples/interests', 'contract.json') };
-            return Commands.generateText(undefined, [ctoPath], 'org.accordproject.interests.Interests', contractPath, '1970-01-01T00:00:00Z').should.be.rejectedWith('No input ergo found');
+            return Commands.generateText(undefined, [ctoPath], contractPath, '1970-01-01T00:00:00Z').should.be.rejectedWith('No input ergo found');
         });
     });
     describe('#initinstallmentsale', function () {

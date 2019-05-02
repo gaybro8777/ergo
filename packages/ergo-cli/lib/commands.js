@@ -157,16 +157,14 @@ class Commands {
      *
      * @param {string[]} ergoPaths paths to the Ergo modules
      * @param {string[]} ctoPaths paths to CTO models
-     * @param {string} contractName the contract name
      * @param {string} contractInput the contract data
      * @param {string} currentTime the definition of 'now'
      * @returns {object} Promise to the result of execution
      */
-    static generateText(ergoPaths,ctoPaths,contractName,contractInput,currentTime) {
+    static generateText(ergoPaths,ctoPaths,contractInput,currentTime) {
         const engine = new Engine();
         const templateLogic = new TemplateLogic('es6');
         templateLogic.addErgoBuiltin();
-        templateLogic.setContractName(contractName);
         if (!ergoPaths) { return Promise.reject('No input ergo found'); }
         for (let i = 0; i < ergoPaths.length; i++) {
             const ergoFile = ergoPaths[i];
@@ -180,7 +178,7 @@ class Commands {
             templateLogic.addModelFile(ctoContent, ctoFile);
         }
         const contractJson = getJson(contractInput);
-        return engine.compileAndGenerateText(templateLogic,contractName,contractJson,currentTime);
+        return engine.compileAndGenerateText(templateLogic,contractJson,currentTime);
     }
 
     /**

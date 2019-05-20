@@ -200,9 +200,9 @@ function arithMean(b) {
     }
 }
 function toString(v) {
-    return toStringQ(v, "");
+    return toStringQ(v, "", true);
 }
-function toStringQ(v, quote) {
+function toStringQ(v, quote, generateText) {
     if (v === null)
         return "null";
     var t = typeof v;
@@ -217,13 +217,13 @@ function toStringQ(v, quote) {
     if ({}.toString.apply(v) == "[object Array]") {
         v = v.slice();
         v.sort();
-        var result = "[";
+        var result = generateText ? "" : "[";
         for (var i=0, n=v.length; i<n; i++) {
             if (i > 0)
-                result += ", ";
+                generateText ? result += "" : result += ", ";
             result += toStringQ(v[i], quote);
         }
-        return result + "]";
+        return generateText ? result + "" : result + "]";
     }
     if (moment.isMoment(v)) {
         return v.format();
@@ -591,8 +591,8 @@ function dateTimeFromString(stringDate) {
     return moment.parseZone(stringDate).utcOffset(utcOffset, false);
 }
 
-const minDateTime = moment.parseZone("0001-01-01 00:00:00").utcOffset(utcOffset, false);
-const maxDateTime = moment.parseZone("3268-01-21 23:59:59").utcOffset(utcOffset, false);
+var minDateTime = moment.parseZone("0001-01-01 00:00:00").utcOffset(utcOffset, false);
+var maxDateTime = moment.parseZone("3268-01-21 23:59:59").utcOffset(utcOffset, false);
 
 function dateTimeMax(v) {
     var v1 = mustBeDateArray(v);
@@ -636,7 +636,7 @@ function dateTimePeriodFromString(stringDuration) {
 
 function dateTimeDurationFromNat(part, v) {
     mustBeUnit(part);
-    let num;
+    var num;
     if (v.hasOwnProperty('nat')) { num = v.nat; } else { num = v; }
     // 'quarters' not built into durations
     if (part === QUARTERS) {
@@ -771,4 +771,3 @@ function unwrapError(result) {
         throw new Error("[Ergo] " + message);
     }
 }
-

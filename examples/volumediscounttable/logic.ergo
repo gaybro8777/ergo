@@ -28,6 +28,7 @@ define function findRate(volume: Double, rateTable: RateRange[]) : Double? {
 contract VolumeDiscount over VolumeDiscountContract {
   // Generate text
   clause generateText() : String {
+		let rate = contract.rates;
     return {{
 Volume-Based Card Acceptance Agreement [Abbreviated]
 
@@ -52,8 +53,8 @@ a) Settlement Amount. Our agent will pay you according to your payment plan, as 
 b) Discount. The Discount is determined according to the following table:
 
 | Annual Dollar Volume      | Discount             |
-{{ foreach r in contract.rates
-return {{| Between {{ r.volumeAbove }} and {{ r.volumeUpTo }} | {{ r.rate }} |
+{{ foreach r in rates
+return {{| Between {{ r.volumeAbove ?? 0.0 }} and {{ r.volumeUpTo ?? infinity }} | {{ r.rate }} |
 }}
 }}
 }}

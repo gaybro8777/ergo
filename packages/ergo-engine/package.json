@@ -37,7 +37,7 @@
   "dependencies": {
     "@accordproject/ergo-compiler": "0.8.2",
     "moment-mini": "2.22.1",
-    "vm2": "3.5.0"
+    "vm2": "3.9.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",
